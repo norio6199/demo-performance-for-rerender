@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { FC, useState } from "react";
+import { JustDiv } from "./components/JustDiv";
+import { MemoComponents } from "./components/MemoComponents";
+import { NoMemoComponents } from "./components/NoMemoComponents";
 
-function App() {
+export const App: FC = () => {
+  const largeData = {} as any;
+  [...new Array(10000)].forEach((item, index) => {
+    largeData[index] = index;
+  });
+
+  const [data, setData] = useState<any>(largeData);
+  const [renderCount, setRenderCount] = useState(1);
+
+  const setLargeData = () => {
+    setData({ ...largeData });
+    setRenderCount(renderCount + 1);
+  };
+
+  const countUpRender = () => {
+    setRenderCount(renderCount + 1);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {renderCount}
+      <br />
+      <button onClick={setLargeData}>set large data</button>
+      <button onClick={countUpRender}>count up render</button>
+      <JustDiv />
+      <NoMemoComponents data={data} />
+      <MemoComponents data={data} />
     </div>
   );
-}
-
-export default App;
+};
